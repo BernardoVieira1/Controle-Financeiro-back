@@ -4,14 +4,14 @@ import cors from 'cors';
 
 const app = express();
 
-const whitelist = ['https://controle-financeiro-nu.vercel.app/'];
+const whitelist = ['https://controle-financeiro-front.vercel.app/'];
 
 const corsOptions: cors.CorsOptions = {
     origin: (origin, callback) => {
         if (whitelist.indexOf(origin!) !== -1) {
             callback(null, true);
         } else {
-            callback(new Error('Acesso não permitido por CORS'));
+            callback(new Error('Acesso não permitido CORS'));
         }
     },
 };
