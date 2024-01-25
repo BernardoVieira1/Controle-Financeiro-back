@@ -6,30 +6,30 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-export default{
-	async loginUser(req:Request,res:Response){
+export default {
+	async loginUser(req: Request, res: Response) {
 		try {
-			const {email,password} = req.body;
+			const { email, password } = req.body;
 
 
-			if(!email || !password){
-				return res.status(400).json({ message: 'preencha todos os campos' });
+			if (!email || !password) {
+				return res.status(400).json({ message: 'preencha todos os campos!' });
 			}
 
 			const user = await prisma.user.findMany({
-				where:{
+				where: {
 					email: email
 				}
 			});
 
 
-			if(user.length != 1){
-				return res.status(404).json({ message: 'Usuario não está cadastrado'});
+			if (user.length != 1) {
+				return res.status(404).json({ message: 'Usuario não está cadastrado!' });
 			}
 
 			const checkPassword = await bcrypt.compare(password, user[0].password);
 
-			if(!checkPassword){
+			if (!checkPassword) {
 				return res.status(400).json({
 					message: 'Senha incorreta',
 					checkPassword
@@ -38,15 +38,15 @@ export default{
 			}
 
 			const secret = process.env.SECRET;
-			const token = jwt.sign({id: user[0].id}, secret);
+			const token = jwt.sign({ id: user[0].id }, secret);
 
 			res.status(201).json({
-				message: 'usuario logado com sucesso',
+				message: 'usuario logado com sucesso!',
 				token
 			});
 
 		} catch (err) {
-			res.json({ message: err.message});
+			res.json({ message: err.message });
 		}
 	},
 
