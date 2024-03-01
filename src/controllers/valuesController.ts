@@ -27,10 +27,10 @@ export default{
 
 			transactions.forEach(transaction =>{
 				if(transaction.type === 'ENTRADA'){
-					entryPrice = entryPrice + transaction.value;
+					entryPrice = entryPrice + Number(transaction.value);
 
 				}else{
-					exitPrice =exitPrice + transaction.value;
+					exitPrice =exitPrice + Number(transaction.value);
 				}
 
 			});
