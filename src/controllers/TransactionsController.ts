@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../database';
 import { JwtPayload } from 'jsonwebtoken';
+import axios from 'axios';
 
 interface customRequest extends Request {
     userId:string | JwtPayload;
@@ -14,6 +15,9 @@ export default{
 			const userId = String(authUserId);
 
 			const {title, value, type, categoria} = req.body;
+
+			let titleCript: string = '';
+			let valueCript: string = '';
 
 			if(!userId){
 				return res.status(400).json({message: 'Usuario não informado'});
@@ -35,11 +39,41 @@ export default{
 				return res.status(400).json({message: 'categoria não informado'});
 			}
 
+			console.log('Teste4:');
+			console.log(title);
+			console.log(value);
+
+			if(categoria == 'Investimentos'){
+
+				const addBlockToBlockchain = async () => {
+					try {
+						const data = { title, value };
+						const response = await axios.post('http://127.0.0.1:5000/add_block', data);
+						({ titleCript, valueCript } = response.data); // Extrair os dados criptografados da resposta
+						console.log('Título criptografado:', titleCript);
+						console.log('Valor criptografado:', valueCript);
+					} catch (error) {
+						console.error('Erro ao adicionar bloco à blockchain:', error);
+					}
+				};
+
+				addBlockToBlockchain();
+			}
+
+			// eslint-disable-next-line prefer-const
+			let titulo2 = titleCript !== '' ? titleCript : title;
+			// eslint-disable-next-line prefer-const
+			let valor2 = valueCript !== '' ? valueCript : value;
+
+			console.log('titulo2');
+			console.log(titulo2);
+			console.log(valor2);
+
 			const transaction = await prisma.transactions.create({
-				data:{
+				data: {
 					userId,
-					title,
-					value,
+					title: titulo2,
+					value: valor2,
 					type,
 					categoria,
 				}

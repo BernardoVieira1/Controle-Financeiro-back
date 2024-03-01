@@ -12,13 +12,12 @@ datasource db {
 
 model transactions {
     id         String   @id @default(cuid())
-    title      String   @default("Sem titulo")
-    value      Float
+    title      String?  @default("Sem titulo")
+    value      String?
     type       String   @default("ENTRADA")
     categoria  String
     dateCreate DateTime @default(now())
     userId     String
-
     user user @relation(fields: [userId], references: [id])
 }
 
@@ -32,3 +31,4 @@ model user {
 
     transactions transactions[]
 }
+
